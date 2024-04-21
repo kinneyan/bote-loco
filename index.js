@@ -2,8 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const userRoutes = require('./routes/user');
-
 // find port
 const PORT = process.env.PORT || 8080;
 
@@ -14,8 +12,6 @@ app.use(bodyParser.json());
 
 // set port
 app.set('port', PORT);
-
-app.use('/user', userRoutes);
 
 app.use((req, res, next) =>
 {
