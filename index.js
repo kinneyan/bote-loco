@@ -14,6 +14,12 @@ app.use(bodyParser.json());
 // set port
 app.set('port', PORT);
 
+// link routes
+const users = require("./routes/users");
+app.use("/api/users", users);
+
+app.locals.db = require("./database/mongo").db;
+
 app.use((req, res, next) =>
 {
     res.setHeader('Access-Control-Allow-Origin', '*');
