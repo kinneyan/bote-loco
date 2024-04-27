@@ -33,8 +33,8 @@ const login = (async (req, res, next) =>
         const query = await db.collection("Users").find(body).toArray();
         if (query.length < 1) throw invalidLogin;
 
-        const hashedPassword = generateHash(_password, query.salt);
-        if (query.password !== hashedPassword) throw invalidLogin;
+        const hashedPassword = generateHash(_password, query[0].password.salt);
+        if (query[0].password.hash !== hashedPassword.hash) throw invalidLogin;
     }
     catch (e)
     {
