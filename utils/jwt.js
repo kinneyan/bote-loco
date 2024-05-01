@@ -4,16 +4,14 @@ const { createSecretKey } = require("crypto");
 // generate secret
 require("dotenv").config();
 
-const encodeToken = (async (body) =>
+const encodeToken = (async (options) =>
 {
-    const secret = createSecretKey(process.env.JWT_SECRET, "utf-8");
-    return await signToken(body, secret).setIssuedAt().setExpirationTime("2h");
-});
+    const secret = createSecretKey(options.secret || process.env.JWT_SECRET, "utf-8");
 
-const signToken = (async (body, secret) =>
-{
-    return await new jose.SignJWT(body)
-    .setProtectedHeader({ alg: "HS256", type: "JWT" })
+    return await new jose.SignJWT(options.body)
+    .setProtectedHeader({ alg: options.alg || "HS256", typ: "JWT" })
+    .setIssuedAt(options.iat || undefined)
+    .setExpirationTime(options.exp || "2h")
     .sign(secret);
 });
 
@@ -21,7 +19,7 @@ const verifyToken = (async (token, secret) =>
 {
     try
     {
-        secret = secret || createSecretKey(process.env.JWT_SECRET, "utf-8");
+        secret = createSecretKey(secret || process.env.JWT_SECRET, "utf-8");
         const { payload, protectedHeader } = await jose.jwtVerify(token, secret);
         return payload;
     }
@@ -32,4 +30,4 @@ const verifyToken = (async (token, secret) =>
     }
 });
 
-module.exports = { encodeToken, signToken, verifyToken };
+module.exports = { encodeToken, verifyToken };

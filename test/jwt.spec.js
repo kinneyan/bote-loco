@@ -1,18 +1,17 @@
 const { expect } = require("chai");
-const { signToken, verifyToken } = require("../utils/jwt");
-const { createSecretKey } = require("crypto");
+const { encodeToken, verifyToken } = require("../utils/jwt");
 
 describe("JWT", () =>
 {
-    const secret = createSecretKey("testsecret123", "utf-8");
+    const secret = "testsecret123"
     const body = { name: "Andrew" };
-    const exampleJWT = "eyJhbGciOiJIUzI1NiIsInR5cGUiOiJKV1QifQ.eyJuYW1lIjoiQW5kcmV3In0.dt9f9MOk-SGAKbbrw7c-kQU8UXamoEnZ6FBpQbLn5UI";
+    const exampleJWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQW5kcmV3IiwiaWF0IjozLCJleHAiOjI3MTQ1MjE2MDV9.BXu_lNgCPG27e2SMgu1MYHs5R_6NCdtqX6MAgzbIUjY";
 
-    describe("#signToken()", () =>
+    describe("#encodeToken()", () =>
     {
         it("Token should match expected test JWT", async () =>
         {
-            const actual = await signToken(body, secret);
+            const actual = await encodeToken({ body: body, secret: secret, iat: 3, exp: 2714521605 });
             expect(actual).to.equal(exampleJWT);
         });
 
