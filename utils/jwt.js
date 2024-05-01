@@ -3,11 +3,11 @@ const { createSecretKey } = require("crypto");
 
 // generate secret
 require("dotenv").config();
-const JWT_SECRET = createSecretKey(process.env.JWT_SECRET, "utf-8");
 
 const encodeToken = (async (body) =>
 {
-    return await signToken(body, JWT_SECRET).setIssuedAt().setExpirationTime("2h");
+    const secret = createSecretKey(process.env.JWT_SECRET, "utf-8");
+    return await signToken(body, secret).setIssuedAt().setExpirationTime("2h");
 });
 
 const signToken = (async (body, secret) =>
