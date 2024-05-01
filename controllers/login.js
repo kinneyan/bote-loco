@@ -33,8 +33,21 @@ const login = (async (req, res, next) =>
         const query = await db.collection("Users").find(body).toArray();
         if (query.length < 1) throw invalidLogin;
 
+        // check passwords
         const hashedPassword = generateHash(_password, query[0].password.salt);
         if (query[0].password.hash !== hashedPassword.hash) throw invalidLogin;
+
+        // generate bearer token
+        res.locals.tokenBody = 
+        {
+            id: query[0]._id,
+            username: username,
+            email: query[0].email,
+            firstName: query[0].firstName,
+            lastName: query[0].lastName,
+        }
+        res.locals.response = response;
+        next();
     }
     catch (e)
     {
@@ -42,10 +55,6 @@ const login = (async (req, res, next) =>
         res.status(e.status || 500).json(response);
         return;
     }
-
-    response.error = response.error || "";
-    res.status(200).json(response);
-    return;
 });
 
 module.exports = { login };
