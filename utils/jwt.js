@@ -17,8 +17,9 @@ const signToken = (async (body, secret) =>
     .sign(secret);
 });
 
-const verifyToken = (async (token) =>
+const verifyToken = (async (token, secret) =>
 {
+    secret = secret || createSecretKey(process.env.JWT_SECRET, "utf-8");
     try
     {
         const { payload, protectedHeader } = await jose.jwtVerify(token, secret);
