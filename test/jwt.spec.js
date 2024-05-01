@@ -22,8 +22,8 @@ describe("JWT", () =>
     {
         it("Should return null if JWT secret cannot be verified", async () =>
         {
-            const badJWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-            expect(await verifyToken(badJWT)).to.equal(null);
+            const badSecret = "bad";
+            expect(await verifyToken(exampleJWT, badSecret)).to.equal(null);
         });
 
         it("Should return JWT body if token was verified", async () =>
