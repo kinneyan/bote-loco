@@ -3,14 +3,14 @@ const { createSecretKey } = require("crypto");
 
 // generate secret
 require("dotenv").config();
-const secret = createSecretKey(process.env.JWT_SECRET, "utf-8");
+const JWT_SECRET = createSecretKey(process.env.JWT_SECRET, "utf-8");
 
 const encodeToken = (async (body) =>
 {
-    return await signToken(body).setIssuedAt().setExpirationTime("2h");
+    return await signToken(body, JWT_SECRET).setIssuedAt().setExpirationTime("2h");
 });
 
-const signToken = (async (body) =>
+const signToken = (async (body, secret) =>
 {
     return await new jose.SignJWT(body)
     .setProtectedHeader({ alg: "HS256", type: "JWT" })
