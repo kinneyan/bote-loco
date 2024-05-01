@@ -55,9 +55,17 @@ const register = (async (req, res, next) =>
             throw serverFailed;
         }
 
-        // return success
-        res.status(200).json(response);
-        return;
+        // generate bearer token
+        res.locals.tokenBody = 
+        {
+            id: add._id,
+            username: body.username,
+            email: add.email,
+            firstName: add.firstName,
+            lastName: add.lastName,
+        }
+        res.locals.response = response;
+        next();
     }
     catch (e)
     {
